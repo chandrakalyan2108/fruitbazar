@@ -42,10 +42,14 @@ pipeline {
                     WAR_FILE=\\$(ls target/*.war | head -n1)
                     sudo cp \\$WAR_FILE ${TOMCAT_HOME}/webapps/${APP_NAME}.war
 
-                    # Stop Tomcat cleanly, kill any leftover java process bound to 8080
+                    # Stop Tomcat cleanly
                     sudo ${TOMCAT_HOME}/bin/shutdown.sh || true
                     sleep 5
-                    sudo pkill -9 -f 'catalina' || true
+
+                    # Kill anything still bound to port 8080 (NOT a broad 'pkill -f catalina',
+                    # which matches the deploy shell's own command line -- e.g. catalina.out in
+                    # this very script -- and kills the SSH session running the pipeline itself)
+                    sudo fuser -k 8080/tcp || true
                     sleep 2
 
                     # Start Tomcat as root consistently (matches sudo used above,
