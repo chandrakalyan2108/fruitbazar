@@ -17,7 +17,7 @@ pipeline {
                 ssh -o StrictHostKeyChecking=no ${USERNAME}@${SERVER_IP} "
                     set -e
                     rm -rf ~/fruitbazar
-                    git clone https://github.com/YOUR_GITHUB_USERNAME/fruitbazar.git ~/fruitbazar
+                    git clone https://github.com/chandrakalyan2108/fruitbazar.git
                     cd ~/fruitbazar
                     mvn clean package
                     sudo rm -rf /opt/tomcat/webapps/${APP_NAME}
